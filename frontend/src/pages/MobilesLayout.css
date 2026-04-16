@@ -1,0 +1,315 @@
+/* ═══════════════════════════════════════════════
+   MobilesLayout.css  —  Flipkart Mobiles Page
+   Clean, card-based design with proper sizing
+═══════════════════════════════════════════════ */
+
+/* ── Root ── */
+.mob-root {
+  width: 100%;
+  max-width: 1464px;
+  margin: 0 auto;
+  background: #f1f3f6;
+  padding: 0 0 20px;
+  box-sizing: border-box;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* ── White card surfaces ── */
+.mob-card {
+  background: #fff;
+  border-radius: 4px;
+  margin: 10px 0;
+  overflow: hidden;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.16);
+}
+
+/* ════════════════════════════════════════════
+   QUICK LINKS
+════════════════════════════════════════════ */
+.mob-quicklinks-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 16px 8px 8px;
+  gap: 0;
+}
+
+.mob-quicklink {
+  flex: 0 0 calc(100% / 7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 6px 10px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.18s;
+  user-select: none;
+}
+.mob-quicklink:hover { background: #f5f5f5; }
+
+.mob-ql-img {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1.5px solid #e8e8e8;
+  transition: box-shadow 0.25s, transform 0.25s;
+}
+.mob-quicklink:hover .mob-ql-img {
+  box-shadow: 0 4px 14px rgba(40,116,240,0.22);
+  transform: translateY(-3px);
+}
+.mob-ql-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ════════════════════════════════════════════
+   HERO CAROUSEL
+════════════════════════════════════════════ */
+.mob-hero-wrap {
+  position: relative;
+  overflow: hidden;
+}
+
+.mob-carousel {
+  position: relative;
+  width: 100%;
+  height: 380px;
+  overflow: hidden;
+  border-radius: 6px;
+}
+
+.mob-carousel-track {
+  display: flex;
+  height: 100%;
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.mob-carousel-slide {
+  flex: 0 0 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.mob-carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Arrows */
+.mob-arr {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: rgba(255,255,255,0.92);
+  border: none;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+.mob-arr:hover {
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.22);
+  transform: translateY(-50%) scale(1.08);
+}
+.mob-arr-l { left: 12px; }
+.mob-arr-r { right: 12px; }
+
+/* Dots */
+.mob-dots {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  z-index: 10;
+}
+.mob-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0,0,0,0.3);
+  background: rgba(255,255,255,0.5);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.25s, transform 0.25s;
+}
+.mob-dot.active {
+  background: #2874f0;
+  border-color: #2874f0;
+  transform: scale(1.3);
+}
+
+/* ════════════════════════════════════════════
+   STRIP BANNERS
+════════════════════════════════════════════ */
+.mob-strip-wrap {
+  width: 100%;
+  margin: 6px 0;
+  border-radius: 6px;
+  overflow: hidden;
+  line-height: 0;
+}
+.mob-strip-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  max-height: 120px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+/* ════════════════════════════════════════════
+   SECTION HEADER
+════════════════════════════════════════════ */
+.mob-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 16px 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+.mob-section-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #212121;
+}
+.mob-section-header a {
+  font-size: 13px;
+  color: #2874f0;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 6px 14px;
+  border: 1.5px solid #2874f0;
+  border-radius: 3px;
+  transition: background 0.18s, color 0.18s;
+}
+.mob-section-header a:hover {
+  background: #2874f0;
+  color: #fff;
+}
+
+/* ════════════════════════════════════════════
+   DEAL CARD GRID
+════════════════════════════════════════════ */
+.mob-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 16px;
+  background: #f1f3f6;
+}
+
+.mob-grid-6 { /* 6 columns */ }
+
+/* Deal card */
+.mob-deal-card {
+  flex: 0 0 calc((100% - 5 * 8px) / 6);
+  border-radius: 4px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.mob-deal-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.mob-deal-img {
+  width: 100%;
+  aspect-ratio: 490 / 740;
+  overflow: hidden;
+}
+.mob-deal-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
+}
+.mob-deal-card:hover .mob-deal-img img {
+  transform: scale(1.04);
+}
+
+/* Taller variant for 510x770 cards */
+.mob-deal-tall .mob-deal-img {
+  aspect-ratio: 510 / 770;
+}
+
+/* ════════════════════════════════════════════
+   BRAND CARD
+════════════════════════════════════════════ */
+.mob-brand-card {
+  flex: 0 0 calc((100% - 5 * 8px) / 6);
+  border-radius: 4px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.mob-brand-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.mob-brand-img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+.mob-brand-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
+}
+.mob-brand-card:hover .mob-brand-img img {
+  transform: scale(1.05);
+}
+
+/* ════════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .mob-deal-card,
+  .mob-brand-card {
+    flex: 0 0 calc((100% - 3 * 6px) / 4);
+  }
+  .mob-quicklink { flex: 0 0 calc(100% / 6); }
+}
+
+@media (max-width: 768px) {
+  .mob-deal-card,
+  .mob-brand-card {
+    flex: 0 0 calc((100% - 2 * 6px) / 3);
+  }
+  .mob-quicklink { flex: 0 0 calc(100% / 4); }
+  .mob-carousel { height: 260px; }
+}
+
+@media (max-width: 480px) {
+  .mob-deal-card,
+  .mob-brand-card {
+    flex: 0 0 calc((100% - 6px) / 2);
+  }
+  .mob-quicklink { flex: 0 0 calc(100% / 3); }
+  .mob-carousel { height: 200px; }
+}
