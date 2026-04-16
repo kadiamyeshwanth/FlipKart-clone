@@ -1,0 +1,79 @@
+/* ── BASE RESET — matching Flipkart source: *, box-sizing: border-box ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── GLOBAL — exact match from Flipkart's CSS ── */
+/* Their source: body,html{font-family:Roboto,Helvetica,Arial,sans-serif;font-size:12px} */
+/* But the html has class "useInterFont" which overrides to Inter */
+/* .useInterFont body = font-family: inter_regular, Arial, sans-serif */
+html, body {
+  font-family: 'Inter', Arial, sans-serif;
+  font-size: 14px;
+  color: #212121;
+  background-color: #f1f3f6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body, button, input, select, textarea {
+  font-family: 'Inter', Arial, sans-serif;
+  letter-spacing: -0.2px;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* ── LINKS ── */
+a { text-decoration: none; color: #333; }
+
+/* ── SCROLLBAR — Flipkart hides all scrollbars */
+::-webkit-scrollbar { display: none; }
+* { scrollbar-width: none; -ms-overflow-style: none; }
+
+/* ── PREVENT text selection on non-input elements (same as Flipkart) ── */
+:not(input):not(textarea):not(button) {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* ── LIST RESET ── */
+ul { list-style: none; }
+
+/* ── BUTTON RESET ── */
+button {
+  background-color: transparent;
+  border: 0;
+  outline: 0;
+  cursor: pointer;
+}
+
+/* ── CSS VARIABLES — from Flipkart's :root ── */
+:root {
+  --fk-blue: #2874f0;
+  --fk-orange: #fb641b;
+  --fk-yellow: #ffe500;
+  --fk-green: #388e3c;
+  --fk-bg: #f1f3f6;
+  --fk-text: #212121;
+  --fk-gray: #878787;
+  --fk-border: #e0e0e0;
+  --font-regular: 400;
+  --font-medium: 500;
+  --font-bold: 600;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* ── GRID ── */
+.grid-column-1 { flex-basis: 100%; max-width: 100%; }
+.grid-column-2 { flex-basis: 50%; max-width: 50%; }
+.grid-column-3 { flex-basis: 33.33%; max-width: 33.33%; }
