@@ -8,6 +8,7 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import CategoryPage from './pages/CategoryPage';
 import BeautyLayout from './pages/BeautyLayout';
+import OrderHistory from './pages/OrderHistory';
 import './index.css';
 import './App.css';
 
@@ -24,6 +25,7 @@ function App() {
           <Route path="/beauty-and-grooming"     element={<BeautyLayout />} />
           <Route path="/cart"                   element={<Cart />} />
           <Route path="/checkout"               element={<Checkout />} />
+          <Route path="/account/orders"         element={<OrderHistory />} />
         </Routes>
       </CartProvider>
     </BrowserRouter>

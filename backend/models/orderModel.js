@@ -86,5 +86,32 @@ const getOrder = async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 };
+// GET all orders for the current user (currently fetches all globally)
+const getUserOrders = async (req, res) => {
+  try {
+    const [orders] = await pool.query('SELECT * FROM orders ORDER BY created_at DESC');
+    
+    if (orders.length === 0) {
+      return res.json({ success: true, data: [] });
+    }
+    
+    const [items] = await pool.query(`
+      SELECT oi.*, p.name, p.image, p.category 
+      FROM order_items oi 
+      JOIN products p ON oi.product_id = p.id
+    `);
 
-module.exports = { placeOrder, getOrder };
+    // Attach the respective items to each order
+    const ordersWithItems = orders.map(order => ({
+      ...order,
+      items: items.filter(item => item.order_id === order.id)
+    }));
+    
+    res.json({ success: true, data: ordersWithItems });
+  } catch (error) {
+    console.error('Error fetching user orders:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
+module.exports = { placeOrder, getOrder, getUserOrders };
