@@ -14,7 +14,8 @@ const placeOrder = async (req, res) => {
     const [cartItems] = await conn.query(`
       SELECT ci.product_id, ci.quantity, p.price, p.name, p.stock
       FROM cart_items ci JOIN products p ON ci.product_id = p.id
-    `);
+      WHERE ci.user_id = ?
+    `, [req.user.id]);
 
     if (cartItems.length === 0) {
       return res.status(400).json({ success: false, message: 'Cart is empty' });
@@ -28,8 +29,8 @@ const placeOrder = async (req, res) => {
 
     // 1. Insert the order
     const [orderResult] = await conn.query(
-      'INSERT INTO orders (address, city, pincode, phone, total, payment_method) VALUES (?, ?, ?, ?, ?, ?)',
-      [address, city, pincode, phone, total.toFixed(2), payment_method]
+      'INSERT INTO orders (user_id, address, city, pincode, phone, total, payment_method) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [req.user.id, address, city, pincode, phone, total.toFixed(2), payment_method]
     );
     const orderId = orderResult.insertId;
 
@@ -47,7 +48,7 @@ const placeOrder = async (req, res) => {
     }
 
     // 4. Clear cart after successful order
-    await conn.query('DELETE FROM cart_items');
+    await conn.query('DELETE FROM cart_items WHERE user_id = ?', [req.user.id]);
 
     await conn.commit();
 
@@ -70,7 +71,7 @@ const placeOrder = async (req, res) => {
 const getOrder = async (req, res) => {
   try {
     const { id } = req.params;
-    const [orders] = await pool.query('SELECT * FROM orders WHERE id = ?', [id]);
+    const [orders] = await pool.query('SELECT * FROM orders WHERE id = ? AND user_id = ?', [id, req.user.id]);
     if (orders.length === 0) {
       return res.status(404).json({ success: false, message: 'Order not found' });
     }
@@ -89,7 +90,7 @@ const getOrder = async (req, res) => {
 // GET all orders for the current user (currently fetches all globally)
 const getUserOrders = async (req, res) => {
   try {
-    const [orders] = await pool.query('SELECT * FROM orders ORDER BY created_at DESC');
+    const [orders] = await pool.query('SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC', [req.user.id]);
     
     if (orders.length === 0) {
       return res.json({ success: true, data: [] });

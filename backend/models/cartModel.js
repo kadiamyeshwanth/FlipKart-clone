@@ -18,8 +18,9 @@ const getCart = async (req, res) => {
         p.brand
       FROM cart_items ci
       JOIN products p ON ci.product_id = p.id
+      WHERE ci.user_id = ?
       ORDER BY ci.created_at DESC
-    `);
+    `, [req.user.id]);
     
     const total = rows.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     const originalTotal = rows.reduce((sum, item) => sum + (item.original_price * item.quantity), 0);
@@ -56,14 +57,14 @@ const addToCart = async (req, res) => {
     }
 
     // Check if already in cart
-    const [existing] = await pool.query('SELECT id, quantity FROM cart_items WHERE product_id = ?', [product_id]);
+    const [existing] = await pool.query('SELECT id, quantity FROM cart_items WHERE product_id = ? AND user_id = ?', [product_id, req.user.id]);
     
     if (existing.length > 0) {
       const newQty = existing[0].quantity + parseInt(quantity);
-      await pool.query('UPDATE cart_items SET quantity = ? WHERE id = ?', [newQty, existing[0].id]);
+      await pool.query('UPDATE cart_items SET quantity = ? WHERE id = ? AND user_id = ?', [newQty, existing[0].id, req.user.id]);
       res.json({ success: true, message: 'Cart updated', cartId: existing[0].id });
     } else {
-      const [result] = await pool.query('INSERT INTO cart_items (product_id, quantity) VALUES (?, ?)', [product_id, quantity]);
+      const [result] = await pool.query('INSERT INTO cart_items (user_id, product_id, quantity) VALUES (?, ?, ?)', [req.user.id, product_id, quantity]);
       res.json({ success: true, message: 'Added to cart', cartId: result.insertId });
     }
   } catch (error) {
@@ -82,7 +83,7 @@ const updateCartItem = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Quantity must be at least 1' });
     }
     
-    await pool.query('UPDATE cart_items SET quantity = ? WHERE id = ?', [quantity, id]);
+    await pool.query('UPDATE cart_items SET quantity = ? WHERE id = ? AND user_id = ?', [quantity, id, req.user.id]);
     res.json({ success: true, message: 'Cart updated' });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Server error' });
@@ -93,7 +94,7 @@ const updateCartItem = async (req, res) => {
 const removeFromCart = async (req, res) => {
   try {
     const { id } = req.params;
-    await pool.query('DELETE FROM cart_items WHERE id = ?', [id]);
+    await pool.query('DELETE FROM cart_items WHERE id = ? AND user_id = ?', [id, req.user.id]);
     res.json({ success: true, message: 'Item removed from cart' });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Server error' });
@@ -103,7 +104,7 @@ const removeFromCart = async (req, res) => {
 // DELETE clear entire cart
 const clearCart = async (req, res) => {
   try {
-    await pool.query('DELETE FROM cart_items');
+    await pool.query('DELETE FROM cart_items WHERE user_id = ?', [req.user.id]);
     res.json({ success: true, message: 'Cart cleared' });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Server error' });

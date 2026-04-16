@@ -41,7 +41,7 @@ const Checkout = () => {
   if (orderId) return (
     <div style={{ minHeight: '100vh', background: '#f1f3f6' }}>
       <Navbar />
-      <div style={{ paddingTop: 78, display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 'calc(100vh - 110px)' }}>
+      <div className="app-content layout-container" style={{ paddingTop: 78, display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 'calc(100vh - 110px)' }}>
         <div style={{
           background: '#fff', borderRadius: 2, padding: 60, textAlign: 'center',
           boxShadow: '0 1px 2px 0 rgba(0,0,0,.2)', maxWidth: 480, width: '100%'
@@ -108,8 +108,8 @@ const Checkout = () => {
   return (
     <div style={{ minHeight: '100vh', background: '#f1f3f6', fontFamily: 'Roboto, Arial, sans-serif' }}>
       <Navbar />
-      <div style={{ paddingTop: 78 }}>
-        <div style={{ maxWidth: 1128, margin: '18px auto', display: 'flex', gap: 16, alignItems: 'flex-start' }}>
+      <div className="app-content" style={{ paddingTop: 78 }}>
+        <div className="layout-container stack-on-mobile" style={{ maxWidth: 1128, margin: '18px auto', display: 'flex', gap: 16, alignItems: 'flex-start' }}>
           
           {/* LEFT: Checkout Steps */}
           <div style={{ flex: 1, minWidth: 0, paddingBottom: 60 }}>
@@ -208,7 +208,7 @@ const Checkout = () => {
           </div>
 
           {/* RIGHT: Price Summary */}
-          <div style={{ width: 340, flexShrink: 0, position: 'sticky', top: 96 }}>
+          <div style={{ width: '100%', maxWidth: 340, flexShrink: 0, position: 'sticky', top: 96 }}>
             <div style={{ background: '#fff', boxShadow: '0 1px 2px 0 rgba(0,0,0,.2)', borderRadius: 2 }}>
               <div style={{ padding: '13px 24px', borderBottom: '1px solid #f0f0f0' }}>
                 <span style={{ fontSize: 16, color: '#878787', fontWeight: 500, textTransform: 'uppercase' }}>Price details</span>

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { useAuth } from '../context/AuthContext';
 import './OrderHistory.css';
 
 const OrderHistory = () => {
+  const { user } = useAuth();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -33,14 +35,29 @@ const OrderHistory = () => {
     }))
   );
 
+  if (!user) {
+    return (
+      <div style={{ backgroundColor: '#f1f3f6', minHeight: '100vh', paddingBottom: 40 }}>
+        <Navbar />
+        <div style={{ padding: '80px 20px', textAlign: 'center', marginTop: 60 }}>
+          <div style={{ background: '#fff', padding: 40, maxWidth: 600, margin: '0 auto', borderRadius: 4, boxShadow: '0 2px 4px rgba(0,0,0,0.08)' }}>
+            <img src="https://static-assets-web.flixcart.com/fk-p-linchpin-web/fk-cp-zion/img/mywishlist-empty_39f7a5.png" alt="Not Logged In" style={{ width: 150, marginBottom: 20 }} />
+            <h2 style={{ fontSize: 18, fontWeight: 500, marginBottom: 10 }}>Please log in to view your orders</h2>
+            <p style={{ color: '#878787', marginBottom: 20 }}>Access your order history and manage your account</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <>
+    <div className="app-content" style={{ minHeight: '100vh', background: '#f1f3f6' }}>
       <Navbar />
-      <div className="order-history-container">
-        <div className="order-history-inner">
+      <div className="order-history-container layout-container">
+        <div className="order-history-inner stack-on-mobile">
           
           {/* Sidebar */}
-          <div className="account-sidebar">
+          <div className="account-sidebar hide-on-mobile">
             <div className="account-user-card">
               <img 
                 src="https://static-assets-web.flixcart.com/fk-p-linchpin-web/fk-cp-zion/img/profile-pic-male_4811a1.svg" 
@@ -156,7 +173,7 @@ const OrderHistory = () => {
         </div>
       </div>
       <Footer />
-    </>
+    </div>
   );
 };
 

@@ -699,11 +699,11 @@ const Home = () => (
     <GlobalStyles />
     <Navbar />
 
-    <div style={{ paddingTop: 158 }}>
+    <div className="app-content" style={{ paddingTop: 158 }}>
       {/* ── ① Full-width auto-sliding banner ── */}
       <BannerCarousel />
 
-      <div style={{ maxWidth: 1280, margin: '0 auto' }}>
+      <div className="layout-container" style={{ maxWidth: 1280, margin: '0 auto' }}>
 
         {/* ── ② Horizontal deal carousels ── */}
         <DealSection title="Best Gadgets & Appliances" category="Electronics" />

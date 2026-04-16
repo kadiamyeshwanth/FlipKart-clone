@@ -5,6 +5,8 @@ const cors = require('cors');
 const productRoutes = require('./routes/products');
 const cartRoutes = require('./routes/cart');
 const orderRoutes = require('./routes/orders');
+const authRoutes = require('./routes/auth');
+const wishlistRoutes = require('./routes/wishlist');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -15,8 +17,10 @@ app.use(express.json()); // Allow reading JSON request bodies
 app.use(express.urlencoded({ extended: true }));
 
 // ── API Routes ─────────────────────────────
+app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
+app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/orders', orderRoutes);
 
 // ── Health check ───────────────────────────
@@ -32,7 +36,9 @@ app.use((req, res) => {
 // ── Start server ───────────────────────────
 app.listen(PORT, () => {
   console.log(`\n🚀 Server running at http://localhost:${PORT}`);
+  console.log(`🔐 Auth API:     http://localhost:${PORT}/api/auth`);
   console.log(`📦 Products API: http://localhost:${PORT}/api/products`);
   console.log(`🛒 Cart API:     http://localhost:${PORT}/api/cart`);
+  console.log(`❤️  Wishlist API: http://localhost:${PORT}/api/wishlist`);
   console.log(`📋 Orders API:   http://localhost:${PORT}/api/orders\n`);
 });

@@ -38,8 +38,8 @@ const Cart = () => {
   return (
     <div className="cart-layout-container" style={{ backgroundColor: '#f1f3f6', minHeight: '100vh', overflowX: 'hidden' }}>
       <Navbar />
-      <div style={{ paddingTop: 180, paddingBottom: 100 }}>
-        <div style={{ maxWidth: 1128, margin: '0 auto', display: 'flex', gap: 16, alignItems: 'flex-start' }}>
+      <div className="app-content" style={{ paddingTop: 180, paddingBottom: 100 }}>
+        <div className="layout-container stack-on-mobile" style={{ maxWidth: 1128, margin: '0 auto', display: 'flex', gap: 16, alignItems: 'flex-start' }}>
           
           {/* LEFT PANE */}
           <div style={{ flex: 1, minWidth: 0, position: 'relative' }}>

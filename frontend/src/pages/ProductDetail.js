@@ -92,11 +92,11 @@ const ProductDetail = () => {
     <div style={{ backgroundColor: '#f1f3f6', minHeight: '100vh', fontFamily: 'Inter, Roboto, Arial, sans-serif', fontSize: 14 }}>
       <Navbar />
       
-      <div style={{ paddingTop: 158 }}>
-        <div style={{ maxWidth: 1248, margin: '0 auto', background: '#fff', display: 'flex', flexDirection: 'column' }}>
+      <div className="app-content" style={{ paddingTop: 158 }}>
+        <div className="layout-container" style={{ maxWidth: 1248, margin: '0 auto', background: '#fff', display: 'flex', flexDirection: 'column' }}>
         
         {/* Main 3 Column Layout */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(350px, 400px) 1fr 340px', padding: '16px 0', borderBottom: '1px solid #f0f0f0' }}>
+        <div className="product-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(350px, 400px) 1fr 340px', padding: '16px 0', borderBottom: '1px solid #f0f0f0' }}>
           
           {/* 1. LEFT COLUMN: Media Gallery */}
           <div style={{ padding: '0 16px', position: 'relative' }}>

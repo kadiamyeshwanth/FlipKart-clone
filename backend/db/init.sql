@@ -2,6 +2,20 @@
 -- Flipkart Clone Database Schema
 -- ============================================
 
+-- Disable foreign key checks temporarily to drop safely
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS order_items, orders, cart_items, wishlist, products, users;
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- Users table
+CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Products table
 CREATE TABLE IF NOT EXISTS products (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -18,18 +32,32 @@ CREATE TABLE IF NOT EXISTS products (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Wishlist table
+CREATE TABLE IF NOT EXISTS wishlist (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  product_id INT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
+  UNIQUE KEY unique_user_product (user_id, product_id)
+);
+
 -- Cart items table
 CREATE TABLE IF NOT EXISTS cart_items (
   id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT, -- Nullable for anonymous carts if needed, but best practice is NO NULL for specific user logic
   product_id INT NOT NULL,
   quantity INT NOT NULL DEFAULT 1,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
   FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
 -- Orders table
 CREATE TABLE IF NOT EXISTS orders (
   id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
   address TEXT NOT NULL,
   city VARCHAR(100),
   pincode VARCHAR(10),
@@ -37,7 +65,8 @@ CREATE TABLE IF NOT EXISTS orders (
   total DECIMAL(10, 2) NOT NULL,
   payment_method VARCHAR(50) DEFAULT 'COD',
   status VARCHAR(50) DEFAULT 'Pending',
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 -- Order items table
@@ -50,12 +79,6 @@ CREATE TABLE IF NOT EXISTS order_items (
   FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
   FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
-
--- Clear existing products and re-seed
-TRUNCATE TABLE order_items;
-TRUNCATE TABLE cart_items;
-DELETE FROM products;
-ALTER TABLE products AUTO_INCREMENT = 1;
 
 -- ============================================
 -- PRODUCTS SEED DATA

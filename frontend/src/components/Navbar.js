@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
+import LoginModal from './LoginModal';
+import './Navbar.css';
 
 /* ═══════════════════════════════════════════════════════════════════
    ALL ASSET URLS extracted directly from the live Flipkart source code
@@ -105,9 +108,11 @@ const SuperCoinIcon = () => (
 const Navbar = ({ activeCategory }) => {
   const navigate = useNavigate();
   const { cartSummary } = useCart();
+  const { user, logout } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [showMore, setShowMore] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -152,6 +157,7 @@ const Navbar = ({ activeCategory }) => {
         {/* ── Minutes Pill ── */}
         <a
           href="/flipkart-minutes-store?marketplace=HYPERLOCAL&autoSwitchAddress=true"
+          className="desktop-only"
           style={{
             display: 'inline-flex', alignItems: 'center', gap: 4,
             background: '#fff', border: '1px solid #d0d0d0', borderRadius: 20,
@@ -166,6 +172,7 @@ const Navbar = ({ activeCategory }) => {
         {/* ── Travel Pill ── */}
         <a
           href="/flights-travel-uhp-at-store?marketplace=travel"
+          className="desktop-only"
           style={{
             display: 'inline-flex', alignItems: 'center', gap: 4,
             background: '#fff', border: '1px solid #d0d0d0', borderRadius: 20,
@@ -177,10 +184,10 @@ const Navbar = ({ activeCategory }) => {
           <img src={TRAVEL_TEXT_URL} alt="Travel" width="36" height="18" style={{ objectFit: 'contain' }} />
         </a>
 
-        <div style={{ flex: 1 }} />
+        <div className="desktop-only" style={{ flex: 1 }} />
 
         {/* ── Location ── */}
-        <div style={{
+        <div className="desktop-only" style={{
           display: 'flex', alignItems: 'center', gap: 4,
           cursor: 'pointer', maxWidth: 280
         }}>
@@ -201,6 +208,7 @@ const Navbar = ({ activeCategory }) => {
         {/* ── SuperCoins ── */}
         <a
           href="/supercoin"
+          className="desktop-only"
           style={{
             display: 'flex', alignItems: 'center', gap: 3,
             background: '#fff8e1', borderRadius: 8,
@@ -261,7 +269,7 @@ const Navbar = ({ activeCategory }) => {
         </form>
 
         {/* Phone download icon */}
-        <button style={{
+        <button className="desktop-only" style={{
           background: 'none', border: 'none', cursor: 'pointer', padding: 4,
           display: 'flex', alignItems: 'center'
         }}>
@@ -275,16 +283,17 @@ const Navbar = ({ activeCategory }) => {
 
         {/* ── Profile / User with Dropdown ── */}
         <div 
+          className="desktop-only"
           style={{ position: 'relative', height: '100%', display: 'flex', alignItems: 'center' }}
           onMouseEnter={() => setShowLogin(true)}
           onMouseLeave={() => setShowLogin(false)}
         >
-          <button style={{
-            background: showLogin ? '#2874f0' : 'none', 
-            border: showLogin ? '1px solid #2874f0' : 'none', 
+          <button onClick={() => !user && setIsLoginModalOpen(true)} style={{
+            background: showLogin && !user ? '#2874f0' : 'none', 
+            border: showLogin && !user ? '1px solid #2874f0' : 'none', 
             cursor: 'pointer',
             display: 'flex', alignItems: 'center', gap: 8,
-            fontSize: 14, fontWeight: 500, color: showLogin ? '#fff' : '#333', 
+            fontSize: 14, fontWeight: 500, color: showLogin && !user ? '#fff' : '#333', 
             padding: '8px 16px',
             borderRadius: 8,
             fontFamily: 'Inter, Arial, sans-serif', whiteSpace: 'nowrap',
@@ -294,9 +303,9 @@ const Navbar = ({ activeCategory }) => {
               src={PROFILE_ICON_URL} 
               alt="Profile" 
               width="24" height="24" 
-              style={{ display: 'block', flexShrink: 0, filter: showLogin ? 'brightness(0) invert(1)' : 'none' }} 
+              style={{ display: 'block', flexShrink: 0, filter: (showLogin && !user) ? 'brightness(0) invert(1)' : 'none' }} 
             />
-            <span>Login</span>
+            <span>{user ? user.name.split(' ')[0] : 'Login'}</span>
             <svg width="12" height="12" viewBox="0 0 14 11" fill="none" style={{ 
               transform: showLogin ? 'rotate(180deg)' : 'none',
               transition: 'transform 0.2s'
@@ -310,7 +319,6 @@ const Navbar = ({ activeCategory }) => {
               position: 'absolute', top: '100%', left: '50%', transform: 'translateX(-50%)',
               paddingTop: 10, zIndex: 1100
             }}>
-              {/* Triangle Caret */}
               <div style={{
                 position: 'absolute', top: 2, left: '50%', transform: 'translateX(-50%)',
                 width: 0, height: 0,
@@ -328,31 +336,36 @@ const Navbar = ({ activeCategory }) => {
                 overflow: 'hidden',
                 border: '1px solid #f0f0f0'
               }}>
-                {/* Header: New customer? */}
-                <div style={{ 
-                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                  padding: '12px 16px', borderBottom: '1px solid #f0f0f0'
-                }}>
-                  <span style={{ fontSize: 13, color: '#212121' }}>New customer?</span>
-                  <a href="/signup" style={{ fontSize: 13, color: '#2874f0', fontWeight: 600, textDecoration: 'none' }}>Sign Up</a>
-                </div>
+                {!user && (
+                  <div style={{ 
+                    display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                    padding: '12px 16px', borderBottom: '1px solid #f0f0f0'
+                  }}>
+                    <span style={{ fontSize: 13, color: '#212121' }}>New customer?</span>
+                    <button onClick={() => setIsLoginModalOpen(true)} style={{ fontSize: 13, color: '#2874f0', fontWeight: 600, border: 'none', background: 'none', cursor: 'pointer' }}>Sign Up</button>
+                  </div>
+                )}
 
                 {[
-                  { icon: PROFILE_ICON_URL,     label: 'My Profile',           href: '/account' },
-                  { icon: PLUS_ICON_URL,        label: 'Flipkart Plus Zone',   href: '/plus' },
-                  { icon: ORDERS_ICON_URL,      label: 'Orders',               href: '/account/orders' },
-                  { icon: WISHLIST_ICON_URL,    label: 'Wishlist',             href: '/wishlist' },
-                  { icon: BECOME_SELLER_ICON,   label: 'Become a Seller',      href: '/seller' },
-                  { icon: REWARDS_ICON_URL,     label: 'Rewards',             href: '/account/rewards' },
-                  { icon: GIFT_CARDS_ICON_URL,  label: 'Gift Cards',           href: '/the-gift-card-store' },
-                  { icon: NOTIF_SETTINGS_ICON,  label: 'Notification Preferences', href: '/communication-preferences' },
-                  { icon: CUSTOMER_CARE_ICON,   label: '24x7 Customer Care',   href: '/helpcentre' },
-                  { icon: ADVERTISE_ICON,       label: 'Advertise',            href: '/advertise' },
-                  { icon: DOWNLOAD_APP_ICON,    label: 'Download App',         href: '/mobile-apps' },
-                ].map((item, idx) => (
+                  { icon: PROFILE_ICON_URL,     label: 'My Profile',           href: '/account', showAlways: true },
+                  { icon: PLUS_ICON_URL,        label: 'Flipkart Plus Zone',   href: '/plus', showAlways: true },
+                  { icon: ORDERS_ICON_URL,      label: 'Orders',               href: '/account/orders', showAlways: true },
+                  { icon: WISHLIST_ICON_URL,    label: 'Wishlist',             href: '/wishlist', showAlways: true },
+                  { icon: BECOME_SELLER_ICON,   label: 'Become a Seller',      href: '/seller', showAlways: false },
+                  { icon: REWARDS_ICON_URL,     label: 'Rewards',             href: '/account/rewards', showAlways: true },
+                  { icon: LOGOUT_ICON,          label: 'Logout',              href: '#', isAction: true },
+                ]
+                .filter(item => user || item.showAlways)
+                .map((item, idx) => (
                   <a
                     key={idx}
                     href={item.href}
+                    onClick={(e) => {
+                      if (item.isAction && item.label === 'Logout') {
+                        e.preventDefault();
+                        logout();
+                      }
+                    }}
                     style={{
                       display: 'flex', alignItems: 'center', gap: 12,
                       padding: '10px 16px', color: '#212121', fontSize: 14,
@@ -371,7 +384,7 @@ const Navbar = ({ activeCategory }) => {
         </div>
 
         {/* ── More ▾ dropdown ── */}
-        <div style={{ position: 'relative' }}>
+        <div className="desktop-only" style={{ position: 'relative' }}>
           <button
             id="more-btn"
             onClick={() => setShowMore(v => !v)}
@@ -428,6 +441,7 @@ const Navbar = ({ activeCategory }) => {
         {/* ── Cart ── */}
         <a
           id="cart-btn"
+          className="desktop-only"
           href="/viewcart?marketplace=FLIPKART"
           onClick={e => { e.preventDefault(); navigate('/cart'); }}
           style={{
@@ -456,7 +470,7 @@ const Navbar = ({ activeCategory }) => {
           ROW 3 — CATEGORY L1 NAV (exact Flipkart apex-static SVG icons)
           background: white; border-bottom: 1px solid #D6D6D6
       ════════════════════════════════════════════════════════ */}
-      <div style={{
+      <div className="desktop-only category-nav" style={{
         display: 'flex', alignItems: 'stretch',
         overflowX: 'auto', scrollbarWidth: 'none',
         background: '#fff', padding: '0 8px',
@@ -534,6 +548,8 @@ const Navbar = ({ activeCategory }) => {
           );
         })}
       </div>
+      
+      <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
     </nav>
   );
 };
