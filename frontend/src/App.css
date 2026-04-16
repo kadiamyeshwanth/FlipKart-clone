@@ -1,0 +1,4 @@
+/* App-level reset — all actual styling is in component inline styles */
+.App {
+  min-width: 1280px;
+}
