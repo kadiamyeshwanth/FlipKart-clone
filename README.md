@@ -1,4 +1,4 @@
-# Flipkart Clone
+# MarketHub
 
 A full-stack e-commerce application built with **React.js** for the frontend and **Node.js/Express** for the backend, mimicking Flipkart's core features and design patterns.
 
